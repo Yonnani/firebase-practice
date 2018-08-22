@@ -96,11 +96,29 @@
 
           function get_memo_list() {
               var ref = 'memos/'+userInfo.uid;
-              console.log(ref);
               var memoRef = database.ref(ref);
-              memoRef.on('child_added', function(data) {
-                  console.log(data);
+              console.log(memoRef);
+              memoRef.on('child_added', onChildAdded, function(error) {
+                  console.error(error);
               });
+          }
+
+          function onChildAdded(data) {
+              console.log(data.val());
+              var key = data.key;
+              var memoData = data.val();
+              var txt = memoData.txt;
+              var title = memoData.title;
+              var firstTxt = txt.substr(0, 1);
+              var html =
+                  "<li id='"+key+"' class=\"collection-item avatar\" onclick=\"fn_get_data_one(this.id);\" >" +
+                  "<i class=\"material-icons circle red\">" + firstTxt + "</i>" +
+                  "<span class=\"title\">" + title + "</span>" +
+                  "<p class='txt'>" + txt + "<br>" +
+                  "</p>" +
+                  "</li>";
+
+              $('.collection').append(html);
           }
       </script>
     </body>
